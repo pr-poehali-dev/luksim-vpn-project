@@ -1,0 +1,72 @@
+{
+  "tests": [
+    {
+      "name": "Validate correct activation key",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "validate_key",
+        "key": "davidik228"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "valid": true
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Reject invalid activation key",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "validate_key",
+        "key": "wrongkey"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "valid": false
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Connect with valid key",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "connect",
+        "key": "davidik228"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "proxy_ip": "152.53.253.78"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Block connection without valid key",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "connect",
+        "key": "wrongkey"
+      },
+      "expectedStatus": 403,
+      "expectedBody": {
+        "success": false
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Get real-time metrics with valid key",
+      "method": "GET",
+      "path": "/?key=davidik228",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "proxy_ip": "152.53.253.78",
+        "status": "connected"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
